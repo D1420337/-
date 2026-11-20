@@ -1,0 +1,1091 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>醜果翻身記 ── AI影像辨識格外品低碳媒合平台</title>
+    <meta name="description" content="全台首創結合 AI 影像自動辨識與在地智慧物流地圖的格外品（醜蔬果）低碳對接平台。降低食物浪費，極小化食物里程，實踐 ESG 減碳與 SDGs 永續社會發展。">
+    
+    <!-- Leaflet CSS for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header>
+        <a href="#" class="logo" id="nav-logo" style="text-decoration:none; display:flex; align-items:center; gap:0.6rem; flex-shrink:0;">
+            <span class="logo-icon" style="font-size:2rem;">🍓</span>
+            <div class="logo-text" style="display:flex; flex-direction:column; line-height:1.2;">
+                <h1 style="margin:0; font-size:1.35rem; font-weight:800; color:#064e3b; letter-spacing:0.02em; white-space:nowrap;">醜果翻身記</h1>
+                <span style="font-size:0.82rem; color:#059669; font-weight:700; letter-spacing:0.04em; white-space:nowrap;">格外品低碳媒合平台</span>
+            </div>
+        </a>
+        
+        <nav>
+            <ul>
+                <li class="nav-tab-item active" data-tab="tab-home"><a href="#home" id="tab-link-home"><i class="fa-solid fa-house"></i> 關於平台</a></li>
+                <li class="nav-tab-item" data-tab="tab-ai"><a href="#ai-portal" id="tab-link-ai"><i class="fa-solid fa-camera"></i> AI格外品分級</a></li>
+                <li class="nav-tab-item" data-tab="tab-map"><a href="#low-carbon-map" id="tab-link-map"><i class="fa-solid fa-map-location-dot"></i> 低碳智慧媒合地圖</a></li>
+                <li class="nav-tab-item" data-tab="tab-market"><a href="#marketplace" id="tab-link-market"><i class="fa-solid fa-store"></i> 格外品市集</a></li>
+                <li class="nav-tab-item" data-tab="tab-upload"><a href="#upload" id="tab-link-upload"><i class="fa-solid fa-cloud-arrow-up"></i> 商品上架</a></li>
+                <li class="nav-tab-item" data-tab="tab-circular"><a href="#circular" id="tab-link-circular"><i class="fa-solid fa-arrows-spin"></i> 永續循環與故事</a></li>
+                <li class="nav-tab-item" data-tab="tab-dashboard"><a href="#dashboard" id="tab-link-dashboard"><i class="fa-solid fa-chart-line"></i> ESG減碳儀表板</a></li>
+                <li class="nav-tab-item" data-tab="tab-member"><a href="#member" id="tab-link-member"><i class="fa-solid fa-user-gear"></i> 會員中心</a></li>
+            </ul>
+        </nav>
+        
+
+    </header>
+
+    <!-- Main Container -->
+    <main>
+
+        <!-- 1. LANDING PAGE SECTION -->
+        <section id="tab-home" class="tab-content active">
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h2>讓每一顆被遺落的果實，<br>在對的地方發光。</h2>
+                    <p>在台灣，每年有高達 20%~25% 的優質農產品，僅因外表瑕疵、大小不符標準而在產地直接被淘汰。我們透過 AI 智慧分級與在地鄰近低碳媒合，為格外品賦予全新生命，協助農民增加收益，降低商家採購成本，攜手實現淨零永續。</p>
+                    <div class="hero-cta">
+                        <button class="btn btn-primary" onclick="switchTab('tab-ai')" id="btn-hero-ai"><i class="fa-solid fa-wand-magic-sparkles"></i> 立即體驗 AI 分級</button>
+                        <button class="btn btn-secondary" onclick="switchTab('tab-map')" id="btn-hero-map"><i class="fa-solid fa-route"></i> 尋看地圖媒合</button>
+                    </div>
+                </div>
+                <div class="hero-image glass-card" style="text-align: center; padding: 1.5rem;">
+                    <img src="assets/strawberry_ugly.png" alt="格外品草莓" style="width: 100%; border-radius: 0.8rem; box-shadow: 0 8px 24px rgba(0,0,0,0.5); object-fit: cover; aspect-ratio: 4/3;" id="hero-fruit-show">
+                    <p style="margin-top: 1rem; font-size: 0.95rem; color: #3d7a5e;"><i class="fa-solid fa-circle-info"></i> 雖然形狀奇特，但甜度與營養跟A級水果完全一樣！</p>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <h2 class="section-title">核心科技與流程設計</h2>
+            <div class="features-grid">
+                <div class="glass-card feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-expand"></i>
+                    </div>
+                    <h3>AI 影像病斑掃描</h3>
+                    <p>手機拍照即可進行一秒雲端掃描，自動匡列表面病斑、畸形面積，並依甜度熟度大數據判定等級與合理定價。</p>
+                </div>
+                
+                <div class="glass-card feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-map-pin"></i>
+                    </div>
+                    <h3>去中心化在地媒合</h3>
+                    <p>打破大盤商壟斷，演算法優先推薦鄰近烘焙坊、加工業者與社福單位，讓供需兩端直接在地媒合，大幅縮短交易時間。</p>
+                </div>
+                
+                <div class="glass-card feature-card">
+                    <div class="feature-icon-wrapper">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <h3>極小化食物里程</h3>
+                    <p>計算同縣市運輸之碳阻跡，精準量化每次媒合的減碳排成果，使微型交易成為可追溯的 ESG 碳足跡減量證明。</p>
+                </div>
+            </div>
+
+            <!-- SDGs Mapping -->
+            <div class="sdg-section">
+                <h2 class="section-title">實踐聯合國永續發展目標 (SDGs)</h2>
+                <div class="sdg-grid">
+                    <div class="glass-card sdg-card sdg-11">
+                        <div class="sdg-badge">11</div>
+                        <div class="sdg-info">
+                            <h4>SDG 11 永續城鄉與地方創生</h4>
+                            <p>無償或低價導流安全食材至弱勢食堂，實踐食物正義；輔導食農青年回鄉結合醜果文創，活化偏鄉農業活力。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card sdg-card sdg-12">
+                        <div class="sdg-badge">12</div>
+                        <div class="sdg-info">
+                            <h4>SDG 12 負責任的消費與生產</h4>
+                            <p>顛覆「線性經濟」的生產即廢棄模式，運用 AI 分級將廢物變資源，重新定義商業交易美學，打造零剩食循環網絡。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card sdg-card sdg-13">
+                        <div class="sdg-badge">13</div>
+                        <div class="sdg-info">
+                            <h4>SDG 13 氣候行動與淨零排放</h4>
+                            <p>地圖演算法將物流限制在鄰近鄉鎮，減少長途運輸碳排放；防止剩食在農田堆放腐爛釋放甲烷，推動農業減碳。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. AI PORTAL SECTION -->
+        <section id="tab-ai" class="tab-content">
+            <h2 class="section-title">AI格外品分級辨識模擬器</h2>
+            <div class="ai-portal-container">
+                
+                <!-- Left Column: Scanner viewport & selection -->
+                <div class="glass-card ai-scanner-box">
+                    <h3 style="display:flex; justify-content:space-between; align-items:center;">
+                        <span><i class="fa-solid fa-camera-retro" style="color:var(--primary);"></i> 拍照上傳分析</span>
+                        <span style="font-size:1rem; color:#3d7a5e;">支援拖曳照片或點選範例</span>
+                    </h3>
+                    
+                    <!-- Viewport containing scanning animations -->
+                    <div class="scanner-viewport" id="viewport-box">
+                        <div class="upload-placeholder" id="upload-placeholder">
+                            <i class="fa-solid fa-camera-retro upload-icon"></i>
+                            <p>點擊拍攝果實，或上傳照片進行 AI 辨識</p>
+                            <div class="upload-btn-group">
+                                <button class="btn btn-primary" id="btn-open-camera" type="button"><i class="fa-solid fa-camera"></i> 開啟相機拍照</button>
+                                <button class="btn btn-secondary" id="btn-upload-file" type="button"><i class="fa-solid fa-image"></i> 選擇圖片</button>
+                            </div>
+                            <input type="file" id="file-uploader" accept="image/*" style="display:none;" />
+                        </div>
+                        
+                        <div id="scanner-canvas-container">
+                            <img id="preview-img" src="" alt="待偵測水果">
+                            <canvas id="blemish-canvas"></canvas>
+                        </div>
+                        
+                        <div class="laser-line" id="scan-laser-line"></div>
+                    </div>
+                    
+                    <!-- Demo Sample Selection -->
+                    <div class="sample-selection">
+                        <p><i class="fa-solid fa-wand-magic-sparkles"></i> 點選農產範例立即體驗 AI 辨識：</p>
+                        <div class="sample-grid" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="sample-item active" data-fruit="strawberry">
+                                <img src="assets/strawberry_ugly.png" alt="格外品草莓">
+                                <span>格外草莓</span>
+                            </div>
+                            <div class="sample-item" data-fruit="pineapple">
+                                <img src="assets/pineapple_ugly.png" alt="格外品鳳梨">
+                                <span>格外鳳梨</span>
+                            </div>
+                            <div class="sample-item" data-fruit="apple">
+                                <img src="assets/apple_ugly.png" alt="格外品蘋果">
+                                <span>格外蘋果</span>
+                            </div>
+                            <div class="sample-item" data-fruit="banana">
+                                <img src="assets/banana_ugly.png" alt="格外品香蕉">
+                                <span>外觀香蕉</span>
+                            </div>
+                            <div class="sample-item" data-fruit="carrot">
+                                <img src="assets/carrot_ugly.png" alt="格外品胡蘿蔔">
+                                <span>分岔胡蘿蔔</span>
+                            </div>
+                            <div class="sample-item" data-fruit="cabbage">
+                                <img src="assets/cabbage_ugly.png" alt="格外品高麗菜">
+                                <span>蟲咬高麗菜</span>
+                            </div>
+                            <div class="sample-item" data-fruit="guava">
+                                <img src="assets/guava_ugly.png" alt="格外品芭樂">
+                                <span>風疤珍珠芭</span>
+                            </div>
+                            <div class="sample-item" data-fruit="tomato">
+                                <img src="assets/tomato_ugly.png" alt="格外品番茄">
+                                <span>裂紋牛番茄</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: AI Analysis Results -->
+                <div class="glass-card ai-results-box">
+                    <div class="ai-status-header">
+                        <div>
+                            <span class="ai-status-title" id="analysis-title"><i class="fa-solid fa-spinner fa-spin" style="display:none;" id="ai-loading-spinner"></i> 系統就緒</span>
+                            <p style="font-size:1rem; color:#3d7a5e; margin-top: 0.25rem;" id="analysis-timestamp">等待使用者輸入農作影像...</p>
+                        </div>
+                        <div class="grade-badge-huge" id="grade-badge-display">-</div>
+                    </div>
+                    
+                    <div class="result-detail-grid">
+                        <div class="detail-item">
+                            <span class="label"><i class="fa-solid fa-seedling"></i> 農產品項</span>
+                            <span class="val" id="res-fruit-type">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label"><i class="fa-solid fa-circle-exclamation"></i> 缺陷特徵</span>
+                            <span class="val" id="res-defect-type" style="color:var(--yellow); font-size:1.05rem;">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label"><i class="fa-solid fa-tags"></i> 產地建議定價</span>
+                            <span class="val val-price" id="res-suggested-price">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label"><i class="fa-solid fa-cloud-arrow-down"></i> 預估減碳貢獻</span>
+                            <span class="val val-carbon" id="res-carbon-savings">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grade-desc-card">
+                        <h5 id="res-grade-title">格外品分級釋義</h5>
+                        <p id="res-grade-description">AI 自動辨識能有效減輕產地農民分類人力成本。上傳水果照片，系統將自動區分為 A級(烘焙)、B級(加工) 或 C級(綠肥料)。</p>
+                    </div>
+
+                    <!-- AI Detailed Inspection Report Sheet -->
+                    <div class="analysis-report-card" id="ai-inspection-report" style="display:none;">
+                        <div class="report-header">
+                            <h4><i class="fa-solid fa-file-invoice"></i> AI格外特徵檢驗分析報告書</h4>
+                        </div>
+                        <div class="defect-bars-container">
+                            <div class="defect-bar-row">
+                                <div class="defect-bar-labels">
+                                    <span>外型不規則 (Deformity)</span>
+                                    <span id="score-shape">0%</span>
+                                </div>
+                                <div class="defect-progress-bg">
+                                    <div class="defect-progress-fill fill-shape" id="bar-shape" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <div class="defect-bar-row">
+                                <div class="defect-bar-labels">
+                                    <span>尺寸過小度 (Under-size)</span>
+                                    <span id="score-size">0%</span>
+                                </div>
+                                <div class="defect-progress-bg">
+                                    <div class="defect-progress-fill fill-size" id="bar-size" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <div class="defect-bar-row">
+                                <div class="defect-bar-labels">
+                                    <span>表皮瑕疵度 (Blemish/Scars)</span>
+                                    <span id="score-blemish">0%</span>
+                                </div>
+                                <div class="defect-progress-bg">
+                                    <div class="defect-progress-fill fill-blemish" id="bar-blemish" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            <div class="defect-bar-row">
+                                <div class="defect-bar-labels">
+                                    <span>色澤不均度 (Color Uneven)</span>
+                                    <span id="score-color">0%</span>
+                                </div>
+                                <div class="defect-progress-bg">
+                                    <div class="defect-progress-fill fill-color" id="bar-color" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-size:0.95rem; color:#2d6a4f; border-top:1.5px dashed rgba(5,150,105,0.3); padding-top:0.6rem; margin-top:0.6rem; font-weight:600;">
+                            <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary);"></i> <strong>AI 推薦買家：</strong> <span id="report-rec-buyers" style="color:#064e3b; font-weight:800;">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Action List Form -->
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:0.75rem;">
+                            <div>
+                                <label style="font-size: 0.95rem; color: #064e3b; margin-bottom: 0.35rem; display:block; font-weight:700;">上架重量 (kg)</label>
+                                <input type="number" id="list-weight" value="50" min="5" max="1000" style="background:#ffffff; border:1.5px solid rgba(5,150,105,0.4); color:#1a4731; padding:0.5rem 0.75rem; border-radius:0.5rem; width:100%; font-family:var(--font-heading); outline:none; font-size:0.95rem; font-weight:700;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.95rem; color: #064e3b; margin-bottom: 0.35rem; display:block; font-weight:700;">產地縣市</label>
+                                <select id="list-location" class="select-custom" style="width:100%; padding:0.5rem 0.75rem; font-size:0.95rem; font-weight:700; background:#ffffff; color:#1a4731; border:1.5px solid rgba(5,150,105,0.4); border-radius:0.5rem;">
+                                    <option value="苗栗大湖">苗栗大湖</option>
+                                    <option value="台南關廟">台南關廟</option>
+                                    <option value="高雄大樹">高雄大樹</option>
+                                    <option value="台中東勢">台中東勢</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size: 0.95rem; color: #064e3b; margin-bottom: 0.35rem; display:block; font-weight:700;">保存期限</label>
+                                <select id="list-expiry" class="select-custom" style="width:100%; padding:0.5rem 0.75rem; font-size:0.95rem; font-weight:700; background:#ffffff; color:#1a4731; border:1.5px solid rgba(5,150,105,0.4); border-radius:0.5rem;">
+                                    <option value="3天">3 天 (儘速)</option>
+                                    <option value="5天">5 天 (適中)</option>
+                                    <option value="7天">7 天 (較長)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="btn-list-to-market" disabled style="font-size:1.05rem; padding:0.75rem; font-weight:800;"><i class="fa-solid fa-arrow-up-from-bracket"></i> 一鍵上架至低碳媒合市場</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MAP SECTION -->
+        <section id="tab-map" class="tab-content">
+            <h2 class="section-title">去中心化智慧物流媒合地圖</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem; margin-top:-0.5rem;">
+                <p style="color:#2d6a4f; font-size:1.05rem; margin:0;"><i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> 在地小農格外品智慧對接，點選地圖上的「農民」標記，查看目前格外品庫存，點擊媒合以尋找最鄰近、食物里程最低的下游烘焙坊或社福中心。</p>
+                <div class="map-view-switch-btns" style="display:flex; gap:0.5rem; flex-shrink:0;">
+                    <button class="btn btn-primary" id="btn-map-interactive" onclick="switchMapDisplayMode('interactive')" style="font-size:0.95rem; padding:0.45rem 1rem; font-weight:700;">
+                        <i class="fa-solid fa-map-location-dot"></i> Google Maps 智慧媒合圖層
+                    </button>
+                    <button class="btn btn-secondary" id="btn-map-embed" onclick="switchMapDisplayMode('embed')" style="font-size:0.95rem; padding:0.45rem 1rem; font-weight:700;">
+                        <i class="fa-brands fa-google"></i> Google Maps 官方實景導航
+                    </button>
+                </div>
+            </div>
+            
+            <div class="map-view-container">
+                <!-- Map Container -->
+                <div class="glass-card map-card" style="position: relative;">
+                    <!-- Google Maps style Search Bar overlay -->
+                    <div class="custom-map-search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="搜尋產地小農、店家或食品廠..." onkeydown="if(event.key === 'Enter') showToast('🔍 搜尋功能：已為您在地圖上過濾對應區域的低碳對接小農！')">
+                        <i class="fa-solid fa-microphone" style="margin-left: 0.5rem;" onclick="showToast('🎙️ 語音搜尋就緒...請說出目的地')"></i>
+                    </div>
+                    <!-- Google Maps style Layer Control overlay -->
+                    <div class="custom-map-layer-control" onclick="toggleGoogleMapLayer()" title="切換 Google 街道圖 / 衛星圖">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <!-- Google Maps style Pegman streetview overlay -->
+                    <div class="custom-map-pegman" onclick="showToast('🧍 Google 街景服務：已開啟果園周邊 360° 實景環景導航！')" title="查看果園街景">
+                        🧍
+                    </div>
+                    <!-- Interactive Google Maps Container -->
+                    <div id="leaflet-map" style="width:100%; height:560px; border-radius:0.75rem;"></div>
+                    <!-- Official Google Maps Embed Iframe -->
+                    <iframe
+                        id="google-map-embed"
+                        width="100%"
+                        height="560px"
+                        style="border:0; border-radius:0.75rem; display:none;"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d919847.4120063!2d120.9820041!3d23.6978196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw">
+                    </iframe>
+                </div>
+                
+                <!-- Map Sidebar details & dynamic logs -->
+                <div class="map-sidebar">
+                    <div class="glass-card" id="map-selection-card">
+                        <div class="sidebar-title">
+                            <span class="logo-icon" id="sidebar-icon">🌾</span>
+                            <span id="sidebar-node-title">請選擇地圖小農</span>
+                        </div>
+                        <p style="font-size: 0.95rem; color: #3d7a5e; margin: 0.5rem 0 1rem 0;" id="sidebar-node-subtitle">在地產銷資訊</p>
+                        
+                        <div class="active-node-details" id="sidebar-details-content" style="display:none;">
+                            <div class="result-detail-grid" style="grid-template-columns:1fr; gap:0.75rem;">
+                                <div class="detail-item" style="padding:0.75rem;">
+                                    <span class="label">目前現有格外品</span>
+                                    <span class="val" id="sidebar-stock" style="font-size:1.1rem; color:var(--primary-light);">-</span>
+                                </div>
+                            </div>
+                            
+                            <div class="routing-stats" id="routing-calculator" style="display:none;">
+                                <div class="routing-stat-row">
+                                    <span>預配對終點:</span>
+                                    <span id="route-dest">-</span>
+                                </div>
+                                <div class="routing-stat-row">
+                                    <span>食物里程 (距離):</span>
+                                    <span id="route-distance">-</span>
+                                </div>
+                                <div class="routing-stat-row carbon-saved">
+                                    <span>本趟節省碳排:</span>
+                                    <span id="route-carbon-saved">-</span>
+                                </div>
+                                <div class="routing-stat-row" id="route-coride-row" style="display:none; color:var(--primary-light);">
+                                    <span>共乘額外減碳:</span>
+                                    <span id="route-coride-saved">-</span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 0.5rem 0;" id="logistics-mode-selector">
+                                <label style="font-size:1rem; color:#3d7a5e; display:block; margin-bottom:0.25rem;">配送模式選擇</label>
+                                <select id="map-route-mode" class="select-custom" style="width:100%; padding:0.4rem;">
+                                    <option value="direct">單獨專車直達配送</option>
+                                    <option value="coride">低碳拼車共乘配送 (多點拼單)</option>
+                                </select>
+                            </div>
+                            
+                            <button class="btn btn-primary" id="btn-trigger-matchmaking" style="width: 100%;"><i class="fa-solid fa-route"></i> 進行低碳智慧物流媒合</button>
+                        </div>
+                        
+                        <div id="sidebar-placeholder-text" style="color: #3d7a5e; font-size:0.9rem; text-align:center; padding: 2rem 0;">
+                            請點選地圖上的小農綠色圓點或標籤，即可查看當前待售的格外品種類並進行動態物流計算。
+                        </div>
+                    </div>
+                    
+                    <!-- Live Matching Feed -->
+                    <div class="glass-card matching-feed-card">
+                        <h3 style="font-size:1.1rem; margin-bottom:1rem;"><i class="fa-solid fa-rss animate-pulse" style="color:var(--danger);"></i> 即時媒合動態牆</h3>
+                        <div class="feed-container" id="match-feed-box">
+                            <!-- Populated dynamically -->
+                            <div class="feed-item">
+                                <div class="feed-time">剛剛</div>
+                                <div class="feed-body">
+                                    <span><b>大湖張小農</b> 的格外草莓成功媒合 <b>苗栗心田麵包坊</b></span>
+                                    <span class="save-tag">-8.2 kg CO2e</span>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-time">10 分鐘前</div>
+                                <div class="feed-body">
+                                    <span><b>關廟黃農友</b> 的格外鳳梨成功媒合 <b>台南愛心廚房</b></span>
+                                    <span class="save-tag">-18.5 kg CO2e</span>
+                                </div>
+                            </div>
+                            <div class="feed-item">
+                                <div class="feed-time">30 分鐘前</div>
+                                <div class="feed-body">
+                                    <span><b>燕巢陳農友</b> 的格外芭樂成功媒合 <b>高雄陽光烘焙坊</b></span>
+                                    <span class="save-tag">-12.1 kg CO2e</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Uber Eats Style Demand Bulletin -->
+            <div class="glass-card" style="margin-top: 3rem;">
+                <h3 class="sidebar-title" style="margin-bottom:0.5rem; justify-content:space-between; width:100%;">
+                    <span><i class="fa-solid fa-bullhorn" style="color:var(--accent);"></i> 商家即時採購公告看板 (Uber 接單模式)</span>
+                    <span class="urgency-badge" style="animation: pulse-red 1.5s infinite;"><i class="fa-solid fa-circle"></i> 系統即時連線中</span>
+                </h3>
+                <p style="color: #3d7a5e; font-size: 0.95rem; margin-bottom:1.5rem;">店家發布格外品採購需求，農民可直接在產地「搶單」發貨。縮短供需對接，節省長途空車運能。</p>
+                <div class="bulletin-grid" id="bulletin-board-grid">
+                    <!-- Populated dynamically by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MARKETPLACE SECTION -->
+        <section id="tab-market" class="tab-content">
+            <h2 class="section-title">格外品交易市集</h2>
+            
+            <!-- Filters -->
+            <div class="market-filters">
+                <div class="filter-group">
+                    <label for="filter-type">品項:</label>
+                    <select id="filter-type" class="select-custom">
+                        <option value="all">全部種類</option>
+                        <option value="草莓">草莓</option>
+                        <option value="鳳梨">鳳梨</option>
+                        <option value="蘋果">蘋果</option>
+                        <option value="香蕉">香蕉</option>
+                        <option value="胡蘿蔔">胡蘿蔔</option>
+                        <option value="高麗菜">高麗菜</option>
+                        <option value="芭樂">芭樂</option>
+                        <option value="番茄">番茄</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-grade">格外品等級:</label>
+                    <select id="filter-grade" class="select-custom">
+                        <option value="all">所有等級</option>
+                        <option value="A">A 級 (烘焙首選)</option>
+                        <option value="B">B 級 (食品加工)</option>
+                        <option value="C">C 級 (堆肥肥料)</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-location">產地縣市:</label>
+                    <select id="filter-location" class="select-custom">
+                        <option value="all">全台灣</option>
+                        <option value="苗栗">苗栗</option>
+                        <option value="台南">台南</option>
+                        <option value="高雄">高雄</option>
+                        <option value="台中">台中</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Marketplace Products Grid -->
+            <div class="market-grid" id="market-products-grid">
+                <!-- Javascript will populate cards here dynamically -->
+            </div>
+        </section>
+
+        <!-- 5. ESG DASHBOARD SECTION -->
+        <section id="tab-dashboard" class="tab-content">
+            <h2 class="section-title">ESG 永續與 SDGs 減碳量化儀表板</h2>
+            
+            <!-- Dynamic Big Counters -->
+            <div class="dashboard-counters-grid">
+                <div class="glass-card counter-card green">
+                    <div class="counter-icon"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="counter-info">
+                        <h4>減碳排放量</h4>
+                        <div class="counter-number"><span id="db-carbon-saved">4,385</span> kg</div>
+                    </div>
+                </div>
+                <div class="glass-card counter-card orange">
+                    <div class="counter-icon"><i class="fa-solid fa-weight-hanging"></i></div>
+                    <div class="counter-info">
+                        <h4>拯救格外品重量</h4>
+                        <div class="counter-number"><span id="db-saved-weight">2,840</span> kg</div>
+                    </div>
+                </div>
+                <div class="glass-card counter-card yellow">
+                    <div class="counter-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div class="counter-info">
+                        <h4>小農創造收益</h4>
+                        <div class="counter-number">NT$ <span id="db-farmer-income">85,200</span></div>
+                    </div>
+                </div>
+                <div class="glass-card counter-card blue">
+                    <div class="counter-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <div class="counter-info">
+                        <h4>社福低碳受惠</h4>
+                        <div class="counter-number"><span id="db-welfare-meals">1,420</span> 餐份</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visual SVG Charts -->
+            <div class="charts-grid">
+                <!-- Left: Carbon saved trend (County wise) -->
+                <div class="glass-card chart-card">
+                    <h3>
+                        <span><i class="fa-solid fa-chart-simple" style="color:var(--primary);"></i> 各縣市低碳媒合減碳量排名</span>
+                        <span style="font-size: 0.95rem; color: #3d7a5e;">單位: kg CO2e</span>
+                    </h3>
+                    <div class="chart-container" id="bar-chart-container">
+                        <!-- Custom Animated SVG Bar Chart -->
+                        <svg class="svg-chart" id="svg-bar-chart" viewBox="0 0 500 280">
+                            <!-- X & Y axis lines -->
+                            <line x1="50" y1="20" x2="50" y2="240" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+                            <line x1="50" y1="240" x2="480" y2="240" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+                            
+                            <!-- Grid lines -->
+                            <line x1="50" y1="75" x2="480" y2="75" class="grid-line" />
+                            <line x1="50" y1="130" x2="480" y2="130" class="grid-line" />
+                            <line x1="50" y1="185" x2="480" y2="185" class="grid-line" />
+                            
+                            <text x="35" y="79" class="chart-text" text-anchor="end">1,500</text>
+                            <text x="35" y="134" class="chart-text" text-anchor="end">1,000</text>
+                            <text x="35" y="189" class="chart-text" text-anchor="end">500</text>
+                            <text x="35" y="244" class="chart-text" text-anchor="end">0</text>
+                            
+                            <!-- Bars (苗栗, 台南, 高雄, 台中, 台東) -->
+                            <!-- Javascript will populate bars for dynamic interactions -->
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Right: Ugly fruit distribution -->
+                <div class="glass-card chart-card">
+                    <h3>
+                        <span><i class="fa-solid fa-chart-pie" style="color:var(--primary);"></i> 格外品去向與使用分級佔比</span>
+                    </h3>
+                    <div class="chart-container" style="flex-direction:column;">
+                        <svg viewBox="0 0 200 200" width="100%" height="180">
+                            <circle cx="100" cy="100" r="70" fill="transparent" stroke="rgba(255,255,255,0.03)" stroke-width="20" />
+                            
+                            <!-- Donut charts segment -->
+                            <!-- We will configure path data in JS for exact percentage rendering -->
+                            <circle id="donut-a" cx="100" cy="100" r="70" fill="transparent" stroke="var(--primary-light)" stroke-width="20" stroke-dasharray="55 100" class="donut-segment" />
+                            <circle id="donut-b" cx="100" cy="100" r="70" fill="transparent" stroke="var(--accent-light)" stroke-width="20" stroke-dasharray="30 100" stroke-dashoffset="-55" class="donut-segment" />
+                            <circle id="donut-c" cx="100" cy="100" r="70" fill="transparent" stroke="var(--yellow)" stroke-width="20" stroke-dasharray="15 100" stroke-dashoffset="-85" class="donut-segment" />
+                        </svg>
+                        
+                        <div class="legend-container" style="width: 100%;">
+                            <div class="legend-item">
+                                <div><span class="legend-color" style="background:var(--primary-light)"></span>A 級 烘焙原料 (烘焙坊/食品廠)</div>
+                                <span style="font-weight:700;" id="leg-percent-a">55%</span>
+                            </div>
+                            <div class="legend-item">
+                                <div><span class="legend-color" style="background:var(--accent-light)"></span>B 級 輔助加工 (果醬/果乾/飼料)</div>
+                                <span style="font-weight:700;" id="leg-percent-b">30%</span>
+                            </div>
+                            <div class="legend-item">
+                                <div><span class="legend-color" style="background:var(--yellow)"></span>C 級 生態綠肥 (田間推肥/綠能)</div>
+                                <span style="font-weight:700;" id="leg-percent-c">15%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PRODUCT UPLOAD SECTION -->
+        <section id="tab-upload" class="tab-content" style="max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem 4rem 1.5rem; display:none;">
+            <h2 class="section-title">格外品自主申報與商品上架</h2>
+            <div class="ai-portal-container" style="grid-template-columns: 1fr 1.2fr; display: grid;">
+                <!-- Left: Upload Form -->
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-cloud-arrow-up" style="color:var(--primary);"></i> 填寫格外品上架資料</h3>
+                    <form id="farmer-upload-form" onsubmit="event.preventDefault(); handleManualProductUpload();" style="display:flex; flex-direction:column; gap:1.2rem;">
+                        <div>
+                            <label class="form-label">商品名稱</label>
+                            <input type="text" id="manual-name" required placeholder="例如：大湖張小農 - 香甜歪歪草莓" class="input-field">
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                            <div>
+                                <label class="form-label">蔬果品項</label>
+                                <select id="manual-type" class="select-custom" style="width:100%;">
+                                    <option value="草莓">草莓</option>
+                                    <option value="鳳梨">鳳梨</option>
+                                    <option value="香蕉">香蕉</option>
+                                    <option value="蘋果">蘋果</option>
+                                    <option value="胡蘿蔔">胡蘿蔔</option>
+                                    <option value="高麗菜">高麗菜</option>
+                                    <option value="芭樂">芭樂</option>
+                                    <option value="番茄">番茄</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">分級等級</label>
+                                <select id="manual-grade" class="select-custom" style="width:100%;">
+                                    <option value="A">A 級 (烘焙原料)</option>
+                                    <option value="B">B 級 (輔助加工)</option>
+                                    <option value="C">C 級 (生態綠肥)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                            <div>
+                                <label class="form-label">上架數量 (kg)</label>
+                                <input type="number" id="manual-weight" required value="50" min="1" class="input-field">
+                            </div>
+                            <div>
+                                <label class="form-label">產地單價 (NT$/kg)</label>
+                                <input type="number" id="manual-price" required value="80" min="1" class="input-field">
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                            <div>
+                                <label class="form-label">產地縣市</label>
+                                <select id="manual-location" class="select-custom" style="width:100%;">
+                                    <option value="苗栗大湖">苗栗大湖</option>
+                                    <option value="台南關廟">台南關廟</option>
+                                    <option value="高雄大樹">高雄大樹</option>
+                                    <option value="台中東勢">台中東勢</option>
+                                    <option value="宜蘭三星">宜蘭三星</option>
+                                    <option value="彰化員林">彰化員林</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">保存期限</label>
+                                <select id="manual-expiry" class="select-custom" style="width:100%;">
+                                    <option value="3天">3 天 (儘速食用)</option>
+                                    <option value="5天">5 天 (適中)</option>
+                                    <option value="7天">7 天 (可冷藏)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">減碳排估算 (kg CO2e/kg)</label>
+                            <input type="number" id="manual-carbon" step="0.1" required value="1.8" class="input-field" readonly style="background:rgba(255,255,255,0.05); cursor:not-allowed;">
+                            <span style="font-size: 0.95rem; color:var(--primary-light);"><i class="fa-solid fa-circle-info"></i> 系統依據品項自動帶入平均剩食減碳排係數</span>
+                        </div>
+                        <div>
+                            <label class="form-label">格外品外觀缺陷描述</label>
+                            <textarea id="manual-desc" rows="3" class="input-field" style="resize:none;" placeholder="請描述格外品特徵，例如：外皮有稍微的摩擦痕跡，甜度獲評優質..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%; padding:0.8rem;"><i class="fa-solid fa-paper-plane"></i> 自主上架到市集與地圖</button>
+                    </form>
+                </div>
+
+                <!-- Right: Inventory Management -->
+                <div class="glass-card" style="display:flex; flex-direction:column; gap:1.5rem; overflow: hidden;">
+                    <h3><i class="fa-solid fa-boxes-stacked" style="color:var(--accent);"></i> 即時庫存管理</h3>
+                    <p style="color: #3d7a5e; font-size: 0.95rem; margin-top:-0.5rem;"><i class="fa-solid fa-circle-info"></i> 以下為您目前上架中的格外品。當有商家預約訂購或完成交易後，系統會即時更新狀態。</p>
+                    <div style="overflow-x:auto;">
+                        <table class="inventory-table">
+                            <thead>
+                                <tr>
+                                    <th>商品</th>
+                                    <th>等級</th>
+                                    <th>庫存量</th>
+                                    <th>單價</th>
+                                    <th>狀態</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-list-tbody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. MEMBER CENTER SECTION -->
+        <section id="tab-member" class="tab-content" style="max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem 4rem 1.5rem; display:none;">
+            <h2 class="section-title">會員中心與永續認證</h2>
+            <div class="ai-portal-container" style="grid-template-columns: 1.2fr 0.8fr; display: grid;">
+                <!-- Left: Role Registration & Profile Edit -->
+                <div class="glass-card" style="display:flex; flex-direction:column; gap:1.5rem;">
+                    <div class="member-role-tabs">
+                        <button class="role-tab-btn active" id="btn-role-farmer" onclick="switchMemberRole('farmer')"><i class="fa-solid fa-tractor"></i> 農民會員</button>
+                        <button class="role-tab-btn" id="btn-role-shop" onclick="switchMemberRole('shop')"><i class="fa-solid fa-store"></i> 店家會員</button>
+                        <button class="role-tab-btn" id="btn-role-charity" onclick="switchMemberRole('charity')"><i class="fa-solid fa-hand-holding-heart"></i> 社福團體</button>
+                    </div>
+
+                    <!-- Farmer Registration Form -->
+                    <div id="member-form-farmer" class="member-form-panel active">
+                        <h3 style="margin-bottom:1.2rem;"><i class="fa-solid fa-address-card" style="color:var(--primary-light);"></i> 農民註冊資料管理</h3>
+                        <form onsubmit="event.preventDefault(); saveMemberProfile('farmer');" class="profile-form-grid">
+                            <div class="form-group">
+                                <label class="form-label">小農姓名/稱呼</label>
+                                <input type="text" id="farmer-name" value="大湖張小農" required class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">果園名稱</label>
+                                <input type="text" id="farmer-farm" value="張家有機草莓園" required class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">聯絡電話</label>
+                                <input type="text" id="farmer-phone" value="0912-345678" required class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">果園所在地</label>
+                                <input type="text" id="farmer-addr" value="苗栗縣大湖鄉靜湖村18號" required class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">永續農法認證</label>
+                                <select id="farmer-cert" class="select-custom" style="width:100%;">
+                                    <option value="有機轉型期">有機轉型期認證</option>
+                                    <option value="產銷履歷">TAP 產銷履歷</option>
+                                    <option value="友善農耕">友善環境耕作 (無農藥)</option>
+                                    <option value="一般栽培">安全無毒栽培</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">主要耕作格外品</label>
+                                <input type="text" id="farmer-crops" value="草莓、高麗菜、番茄" placeholder="草莓、鳳梨..." class="input-field">
+                            </div>
+                            <div style="grid-column: 1/-1;">
+                                <button type="submit" class="btn btn-primary" style="padding:0.75rem 1.5rem;"><i class="fa-solid fa-floppy-disk"></i> 儲存農民個人資料</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Shop Registration Form -->
+                    <div id="member-form-shop" class="member-form-panel">
+                        <h3 style="margin-bottom:1.2rem;"><i class="fa-solid fa-store" style="color:var(--accent-light);"></i> 店家/烘焙坊註冊資料管理</h3>
+                        <form onsubmit="event.preventDefault(); saveMemberProfile('shop');" class="profile-form-grid">
+                            <div class="form-group">
+                                <label class="form-label">店家負責人名稱</label>
+                                <input type="text" id="shop-owner" placeholder="例如：李阿木" value="張美玲" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">店家/烘焙坊名稱</label>
+                                <input type="text" id="shop-name" placeholder="例如：苗栗心田麵包坊" value="苗栗心田麵包坊" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">聯絡電話</label>
+                                <input type="text" id="shop-phone" placeholder="0923-456789" value="0923-456789" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">店家地址 (地圖媒合用)</label>
+                                <input type="text" id="shop-addr" placeholder="例如：苗栗市中山路120號" value="苗栗市中山路120號" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">店家類型</label>
+                                <select id="shop-type" class="select-custom" style="width:100%;">
+                                    <option value="bakery" selected>烘焙坊 (常備原料需求)</option>
+                                    <option value="restaurant">餐廳/食堂 (熟食料理)</option>
+                                    <option value="processor">食品加工廠 (果乾果汁果醬)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">主要需求格外品與等級</label>
+                                <input type="text" id="shop-demand" placeholder="例如：草莓(A級)、鳳梨(B級)" value="草莓(A級)、高麗菜(A級)" class="input-field">
+                            </div>
+                            <div style="grid-column: 1/-1;">
+                                <button type="submit" class="btn btn-primary" style="padding:0.75rem 1.5rem;"><i class="fa-solid fa-floppy-disk"></i> 儲存店家註冊資料</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Charity Registration Form -->
+                    <div id="member-form-charity" class="member-form-panel">
+                        <h3 style="margin-bottom:1.2rem;"><i class="fa-solid fa-hand-holding-heart" style="color:#60a5fa;"></i> 社福機構註冊資料管理</h3>
+                        <form onsubmit="event.preventDefault(); saveMemberProfile('charity');" class="profile-form-grid">
+                            <div class="form-group">
+                                <label class="form-label">機構聯絡人姓名</label>
+                                <input type="text" id="charity-contact" placeholder="例如：張社工" value="張益瑞社工" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">社福機構名稱</label>
+                                <input type="text" id="charity-name" placeholder="例如：苗栗石蓮社福食堂" value="苗栗石蓮社福食堂" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">聯絡電話</label>
+                                <input type="text" id="charity-phone" placeholder="037-333444" value="037-333444" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">機構送餐/發送地址</label>
+                                <input type="text" id="charity-addr" placeholder="例如：苗栗市大同路88號" value="苗栗市大同路88號" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">受惠人群規模</label>
+                                <select id="charity-scale" class="select-custom" style="width:100%;">
+                                    <option value="50" selected>50 人以下弱勢共餐</option>
+                                    <option value="150">50 - 200 人中型安置所</option>
+                                    <option value="500">200 人以上大型發送網絡</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">可接受格外品等級範圍</label>
+                                <input type="text" id="charity-grades" value="A級與B級，可接受外觀畸形或小黑點" class="input-field">
+                            </div>
+                            <div style="grid-column: 1/-1;">
+                                <button type="submit" class="btn btn-primary" style="padding:0.75rem 1.5rem;"><i class="fa-solid fa-floppy-disk"></i> 儲存社福機構資料</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right: ESG Badges and Achievements -->
+                <div class="glass-card" style="display:flex; flex-direction:column; gap:1.5rem; text-align:center;">
+                    <h3><i class="fa-solid fa-award" style="color:var(--yellow);"></i> 永續 ESG 榮譽認證牆</h3>
+                    <div style="margin: 0.5rem auto;">
+                        <div class="member-profile-avatar">🌾</div>
+                        <h4 id="display-profile-name" style="margin-top:0.8rem; font-size: 0.95rem;">大湖張小農</h4>
+                        <span class="user-role-badge" id="display-profile-role">在地農耕生產者</span>
+                    </div>
+
+                    <!-- ESG Badges list -->
+                    <div class="esg-badges-grid">
+                        <div class="esg-badge-item active" title="拯救剩食累計超過 100 kg">
+                            <div class="badge-icon">🥦</div>
+                            <span>剩食防衛軍</span>
+                        </div>
+                        <div class="esg-badge-item active" title="累計減碳量超過 200 kg CO2e">
+                            <div class="badge-icon">🌱</div>
+                            <span>低碳倡議者</span>
+                        </div>
+                        <div class="esg-badge-item" id="badge-welfare" title="累計媒合社福機構受惠大於 3 次">
+                            <div class="badge-icon">❤️</div>
+                            <span>食物正義使者</span>
+                        </div>
+                        <div class="esg-badge-item" id="badge-coride" title="地圖上執行過拼車共乘物流大於 2 次">
+                            <div class="badge-icon">🚚</div>
+                            <span>拼車減碳達人</span>
+                        </div>
+                    </div>
+                    
+                    <div class="badge-info-box" style="text-align: left;">
+                        <h5 style="color:var(--primary-light); font-weight:700;"><i class="fa-solid fa-bolt"></i> 目前 ESG 永續成就等級</h5>
+                        <p style="font-size:1rem; color:#3d7a5e; margin-top:0.4rem;" id="esg-level-desc">您已成功減少碳足跡排放，解鎖「剩食防衛軍」與「低碳倡議者」榮譽徽章！繼續進行地圖媒合或市集交易可解鎖更多勳章並賺取永續積分。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Buy/Checkout Modal -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="glass-card modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title">低碳媒合交易結帳</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div>
+                    <h4 id="modal-item-name" style="font-size: 0.95rem; color: var(--text-main);">格外草莓</h4>
+                    <p style="font-size: 0.95rem; color: #3d7a5e; margin-top: 0.25rem;">
+                        <span id="modal-item-info">大湖小農黃農友 - A級格外品</span>
+                    </p>
+                </div>
+                
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:0.75rem 1rem; border-radius:0.5rem; border:1px solid rgba(255,255,255,0.05);">
+                    <span style="font-size:0.9rem; color: #3d7a5e;">購買重量 / 單價:</span>
+                    <span style="font-weight:700; font-family:var(--font-heading);" id="modal-price-calc">50 kg / NT$ 2,500</span>
+                </div>
+                
+                <!-- Logistics Delivery Mode Options -->
+                <div>
+                    <label style="font-size:1rem; color:#3d7a5e; display:block; margin-bottom:0.5rem;"><i class="fa-solid fa-truck-fast"></i> 選擇低碳配送物流方式</label>
+                    <div class="delivery-options">
+                        <div class="delivery-card active" data-logistics="local-coop" onclick="selectLogistics(this, 0.9)">
+                            <input type="radio" name="logistics" id="log-coop" checked>
+                            <div class="delivery-info">
+                                <span>同縣市小農共同配送 (綠色低碳)</span>
+                                <span>食物里程 <span class="miles-val">6.8</span> km | 預估運費 NT$150</span>
+                            </div>
+                        </div>
+                        <div class="delivery-card" data-logistics="self-pickup" onclick="selectLogistics(this, 1.0)">
+                            <input type="radio" name="logistics" id="log-self">
+                            <div class="delivery-info">
+                                <span>商家環保自取 (零物流碳排)</span>
+                                <span>自備環保箱 | 運費 NT$0</span>
+                            </div>
+                        </div>
+                        <div class="delivery-card" data-logistics="standard" onclick="selectLogistics(this, 0.2)">
+                            <input type="radio" name="logistics" id="log-standard">
+                            <div class="delivery-info">
+                                <span>傳統長途宅配物流 (高碳足跡)</span>
+                                <span>跨縣市物流配送 | 運費 NT$300</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Match carbon details -->
+                <div class="checkout-summary">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size: 0.95rem; color:var(--text-main); font-weight:600;"><i class="fa-solid fa-leaf" style="color:var(--primary-light);"></i> 永續環保貢獻：</span>
+                        <span style="color:var(--primary-light); font-weight:800; font-family:var(--font-heading);" id="modal-checkout-carbon">-8.2 kg CO2e</span>
+                    </div>
+                    <p style="font-size: 0.95rem; color: #3d7a5e; margin-top:0.4rem;" id="modal-carbon-detail">此交易成功將多保留一顆地球大氣的潔淨。拯救本筆食材亦可為您或貴公司登錄碳減量認證。</p>
+                </div>
+                
+                <button class="btn btn-primary" id="btn-confirm-checkout" style="width: 100%; margin-top: 0.5rem;"><i class="fa-solid fa-check"></i> 確認媒合並付款完成</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. CIRCULAR LOOP & STORY SECTION (NEW) -->
+    <section id="tab-circular" class="tab-content" style="max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem 4rem 1.5rem; display:none;">
+        <h2 class="section-title">未售格外品再利用流向推薦</h2>
+        <p style="color: #3d7a5e; margin-bottom: 2rem; margin-top: -1rem;">
+            <i class="fa-solid fa-circle-info"></i> 當格外品在市集面臨即將過期且無商家認購時，系統啟動永續循環機制，一鍵導流至綠色肥料與生態飼料通道，實現 100% 零廢棄。
+        </p>
+        
+        <div class="surplus-container">
+            <div class="glass-card surplus-card">
+                <h4><i class="fa-solid fa-cow"></i> 生態飼料廠綠色通道</h4>
+                <p>適合B/C級高水分格外品（如香蕉、番茄、高麗菜），供在地牧場或家禽飼料廠使用。</p>
+                <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:0.5rem; font-size: 0.95rem; margin-bottom:1rem; color: #3d7a5e;">
+                    預估回收碳阻：<strong>-1.2 kg CO2e / kg</strong>
+                </div>
+                <button class="btn btn-surplus-redirect" onclick="triggerSurplusLoop('飼料場', 1.2)"><i class="fa-solid fa-truck-arrow-right"></i> 一鍵整批導流出貨</button>
+            </div>
+            
+            <div class="glass-card surplus-card" style="border-color:var(--primary-light);">
+                <h4 style="color:var(--primary-light);"><i class="fa-solid fa-seedling"></i> 田間生態堆肥場</h4>
+                <p>適合腐爛嚴重或受損的C級格外品，進行厭氧發酵分解，化作高價值有機底肥，回饋在地稻田。</p>
+                <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:0.5rem; font-size: 0.95rem; margin-bottom:1rem; color: #3d7a5e;">
+                    預估有機轉化率：<strong>85% 以上</strong>
+                </div>
+                <button class="btn btn-surplus-redirect" style="border-color:var(--primary-light); color:var(--primary-light);" onclick="triggerSurplusLoop('堆肥場', 0.8)"><i class="fa-solid fa-rotate"></i> 一鍵綠色有機堆肥</button>
+            </div>
+            
+            <div class="glass-card surplus-card" style="border-color:#3b82f6;">
+                <h4 style="color:#3b82f6;"><i class="fa-solid fa-people-roof"></i> 社區共餐農園</h4>
+                <p>將還處於保鮮期末端的格外品轉贈至在地弱勢食堂與社區農園，實踐剩食社福正義。</p>
+                <div style="background:rgba(255,255,255,0.02); padding:0.6rem; border-radius:0.5rem; font-size: 0.95rem; margin-bottom:1rem; color: #3d7a5e;">
+                    本項交易將登錄為：<strong>SDG 11 成果</strong>
+                </div>
+                <button class="btn btn-surplus-redirect" style="border-color:#3b82f6; color:#3b82f6;" onclick="triggerSurplusLoop('社區共餐', 1.5)"><i class="fa-solid fa-hand-holding-heart"></i> 無償轉贈共餐</button>
+            </div>
+        </div>
+
+        <!-- Story專區 -->
+        <h2 class="section-title" style="margin-top: 4rem;">格外品文創故事與品牌週邊</h2>
+        <p style="color: #3d7a5e; margin-bottom: 2rem; margin-top: -1rem;">
+            <i class="fa-solid fa-circle-info"></i> 透過文創包裝與故事行銷翻轉醜果形象，讓消費者與企業看見格外品的真實永續價值。
+        </p>
+        
+        <div class="story-grid">
+            <div class="glass-card story-card">
+                <img src="assets/strawberry_ugly.png" alt="醜果草莓醬" class="story-img">
+                <div class="story-content">
+                    <span class="story-tag">格外手作果醬</span>
+                    <h4>「美中不足，甜中有餘」手作果醬</h4>
+                    <p>與苗栗烘焙坊合作，將大湖小農當天採收、外形微凹的 A 級格外草莓，在黃金6小時內加入冰糖熬煮。留存最原始濃郁的草莓食味，每一口都是支持在地小農的味道。</p>
+                </div>
+            </div>
+            
+            <div class="glass-card story-card">
+                <img src="assets/pineapple_ugly.png" alt="格外鳳梨酥" class="story-img">
+                <div class="story-content">
+                    <span class="story-tag">文創鳳梨甜品</span>
+                    <h4>「對稱的美學，不對稱的美味」鳳梨酥</h4>
+                    <p>關廟雙生畸形鳳梨雖不對稱，但果肉糖度達15度！我們保留了其豐富的粗纖維，調配出酸甜平衡的經典土鳳梨內餡，翻轉格外品為次等原料的刻板印象。</p>
+                </div>
+            </div>
+            
+            <div class="glass-card story-card">
+                <img src="assets/apple_ugly.png" alt="風疤蘋果乾" class="story-img">
+                <div class="story-content">
+                    <span class="story-tag">低碳蘋果乾</span>
+                    <h4>「風吻痕跡」低碳原味蘋果乾</h4>
+                    <p>來自台中東勢高海拔果園，無農藥殘留的疤痕蘋果。經過十道洗淨與切片低溫烘焙，完美保留果膠與天然香氣，是企業 ESG 綠色採購的最佳選擇。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast Notification Area -->
+    <div class="toast-container" id="toast-area"></div>
+
+    <!-- Floating Line-style Chat Room -->
+    <div class="floating-chat-bubble" id="floating-chat-btn" onclick="toggleChatWindow()">
+        <i class="fa-solid fa-comments"></i>
+        <div class="chat-unread" id="chat-unread-count">1</div>
+    </div>
+    
+    <div class="chat-window" id="chat-window-box">
+        <div class="chat-header">
+            <div class="chat-user-info">
+                <div class="chat-avatar">🌾</div>
+                <div>
+                    <h4 id="chat-farmer-name">大湖張小農</h4>
+                    <span><i class="fa-solid fa-circle" style="font-size:0.5rem; color:var(--primary-light);"></i> 線上中</span>
+                </div>
+            </div>
+            <button class="chat-close" onclick="toggleChatWindow()">&times;</button>
+        </div>
+        
+        <div class="chat-messages" id="chat-message-list">
+            <div class="msg-bubble receiver">
+                您好！我是小農夥伴，請問您對我們上架的格外品農產感興趣嗎？有任何規格或低碳配送問題都可以問我喔！
+                <span class="msg-time">下午 6:30</span>
+            </div>
+            <div class="chat-typing-dots" id="chat-typing-loader">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+        
+        <!-- Suggested Quick Questions -->
+        <div class="chat-suggested-questions" id="chat-suggested-box">
+            <span class="question-chip" onclick="sendQuickMessage('請問格外品甜度如何？')">詢問甜度風味</span>
+            <span class="question-chip" onclick="sendQuickMessage('可以再便宜一點點嗎？')">協商定價優惠</span>
+            <span class="question-chip" onclick="sendQuickMessage('如何約定取貨時間與配送？')">約定低碳物流</span>
+        </div>
+        
+        <div class="chat-input-area">
+            <input type="text" id="chat-input-field" placeholder="輸入訊息..." onkeydown="if(event.key === 'Enter') sendUserChatMessage()">
+            <button class="btn-chat-send" onclick="sendUserChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+
+    <!-- Leaflet Map Script -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Custom scripts -->
+    <script src="js/ai-grading.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/camera.js"></script>
+
+    <!-- Camera Modal -->
+    <div id="camera-modal" class="camera-modal-overlay" style="display:none;">
+        <div class="camera-modal-inner">
+            <div class="camera-modal-header">
+                <span><i class="fa-solid fa-camera" style="color:var(--primary-light);"></i> 拍攝格外品</span>
+                <button id="btn-camera-close" class="camera-close-btn" title="關閉"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="camera-video-wrap">
+                <video id="camera-stream" autoplay playsinline muted></video>
+                <div class="camera-scan-frame">
+                    <span class="corner tl"></span>
+                    <span class="corner tr"></span>
+                    <span class="corner bl"></span>
+                    <span class="corner br"></span>
+                </div>
+                <div class="camera-tip"><i class="fa-solid fa-circle-info"></i> 將果實置於框內，對準後按下拍攝</div>
+            </div>
+            <div class="camera-modal-footer">
+                <button id="btn-switch-camera" class="btn btn-secondary" type="button" title="切換前後鏡頭"><i class="fa-solid fa-arrows-rotate"></i> 切換鏡頭</button>
+                <button id="btn-capture" class="camera-capture-btn" type="button"><i class="fa-solid fa-camera"></i></button>
+                <button id="btn-camera-upload-instead" class="btn btn-secondary" type="button"><i class="fa-solid fa-image"></i> 改用上傳</button>
+            </div>
+            <canvas id="camera-snap-canvas" style="display:none;"></canvas>
+        </div>
+    </div>
+</body>
+</html>
