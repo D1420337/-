@@ -1,4 +1,4 @@
-﻿/* import Google Fonts Outfit & Inter */
+/* import Google Fonts Outfit & Inter */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
@@ -132,23 +132,39 @@ header {
 .logo {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.75rem;
     text-decoration: none;
     color: var(--text-main);
     flex-shrink: 0;
 }
 
+/* 品牌 3D 空翻向量 Logo 容器 (具有 3D 透視空間) */
+.logo-somersault-3d-wrap {
+    perspective: 600px;
+    perspective-origin: center center;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+    transform-style: preserve-3d;
+}
+
+.strawberry-3d-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform-style: preserve-3d;
+}
+
+/* 舊有的相容樣式 */
 .logo-icon {
     font-size: 2.2rem;
     display: inline-block;
-    transform-origin: center bottom;
-    animation: strawberry-somersault 3.8s ease-in-out infinite;
-    cursor: pointer;
-    user-select: none;
-}
-
-.logo:hover .logo-icon {
-    animation: strawberry-somersault-fast 0.85s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* 平台名稱與多層次品牌標題 */
