@@ -119,13 +119,14 @@ header {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 2px solid rgba(16, 185, 129, 0.25);
-    padding: 0.5rem 1.25rem;
+    padding: 0.6rem 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 20px rgba(5, 90, 50, 0.08);
     gap: 0.75rem;
-    overflow: hidden; /* 徹底杜絕任何滾動條或滑動 */
+    overflow-x: clip; /* 杜絕橫向滑動 */
+    overflow-y: visible; /* 允許草莓翻跟斗垂直向上跳起 */
 }
 
 .logo {
@@ -140,13 +141,14 @@ header {
 .logo-icon {
     font-size: 2.2rem;
     display: inline-block;
-    transform-origin: center center;
-    animation: strawberry-flip 3.5s ease-in-out infinite;
+    transform-origin: center bottom;
+    animation: strawberry-somersault 3.8s ease-in-out infinite;
     cursor: pointer;
+    user-select: none;
 }
 
 .logo:hover .logo-icon {
-    animation: strawberry-flip-fast 0.6s ease-in-out;
+    animation: strawberry-somersault-fast 0.85s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* 平台名稱與多層次品牌標題 */
@@ -1305,31 +1307,62 @@ main {
     50% { transform: translateY(-8px); }
 }
 
-/* 草莓翻一圈動畫 */
-@keyframes strawberry-flip {
-    0% {
-        transform: rotate(0deg) translateY(0) scale(1);
+/* 草莓高空翻跟斗動畫 (起跳、騰空倒立360度翻轉、著地緩衝) */
+@keyframes strawberry-somersault {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1, 1);
+    }
+    6% {
+        /* 蹲下集氣蓄力 (壓扁) */
+        transform: translateY(3px) rotate(-6deg) scale(1.18, 0.82);
     }
     14% {
-        transform: rotate(180deg) translateY(-5px) scale(1.18);
+        /* 起跳升空前翻 */
+        transform: translateY(-12px) rotate(90deg) scale(0.95, 1.12);
     }
-    28% {
-        transform: rotate(360deg) translateY(0) scale(1);
+    22% {
+        /* 空中最高點：頭下腳上倒立翻跟斗！ */
+        transform: translateY(-22px) rotate(180deg) scale(1.15, 1.05);
     }
-    100% {
-        transform: rotate(360deg) translateY(0) scale(1);
+    30% {
+        /* 翻轉後半段下墜 */
+        transform: translateY(-10px) rotate(270deg) scale(0.98, 1.1);
+    }
+    38% {
+        /* 著地衝擊緩衝 (壓扁接地) */
+        transform: translateY(1px) rotate(360deg) scale(1.2, 0.82);
+    }
+    45% {
+        /* 彈起小回正 */
+        transform: translateY(-4px) rotate(360deg) scale(0.96, 1.05);
+    }
+    52% {
+        /* 站穩 */
+        transform: translateY(0) rotate(360deg) scale(1, 1);
     }
 }
 
-@keyframes strawberry-flip-fast {
+@keyframes strawberry-somersault-fast {
     0% {
-        transform: rotate(0deg) scale(1);
+        transform: translateY(0) rotate(0deg) scale(1, 1);
+    }
+    15% {
+        transform: translateY(3px) rotate(-8deg) scale(1.2, 0.8);
+    }
+    35% {
+        transform: translateY(-16px) rotate(120deg) scale(0.95, 1.15);
     }
     50% {
-        transform: rotate(180deg) scale(1.25);
+        transform: translateY(-24px) rotate(180deg) scale(1.15, 1.05);
+    }
+    70% {
+        transform: translateY(-8px) rotate(290deg) scale(0.98, 1.1);
+    }
+    85% {
+        transform: translateY(1px) rotate(360deg) scale(1.22, 0.8);
     }
     100% {
-        transform: rotate(360deg) scale(1);
+        transform: translateY(0) rotate(360deg) scale(1, 1);
     }
 }
 
