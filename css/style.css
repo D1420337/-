@@ -110,7 +110,7 @@ select option {
     padding: 0.4rem !important;
 }
 
-/* Sticky Header Glassmorphism */
+/* Sticky Header Glassmorphism - 無滑動/無滾動條 */
 header {
     position: sticky;
     top: 0;
@@ -119,14 +119,13 @@ header {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 2px solid rgba(16, 185, 129, 0.25);
-    padding: 0.55rem 1.5rem;
+    padding: 0.5rem 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 20px rgba(5, 90, 50, 0.08);
-    gap: 1rem;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    gap: 0.75rem;
+    overflow: hidden; /* 徹底杜絕任何滾動條或滑動 */
 }
 
 .logo {
@@ -139,8 +138,15 @@ header {
 }
 
 .logo-icon {
-    font-size: 2rem;
-    animation: float-logo 4s ease-in-out infinite;
+    font-size: 2.2rem;
+    display: inline-block;
+    transform-origin: center center;
+    animation: strawberry-flip 3.5s ease-in-out infinite;
+    cursor: pointer;
+}
+
+.logo:hover .logo-icon {
+    animation: strawberry-flip-fast 0.6s ease-in-out;
 }
 
 /* 平台名稱與多層次品牌標題 */
@@ -168,35 +174,45 @@ header {
 }
 
 .logo-text .en-title {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     font-weight: 800;
-    color: #d97706; /* 活力金色/明亮暖黃 */
+    color: #ebc632 !important; /* 指定亮黃色 */
+    text-shadow: 0 0.5px 1px rgba(180, 83, 9, 0.25);
     font-family: 'Outfit', sans-serif;
     letter-spacing: 0.05em;
     white-space: nowrap;
 }
 
-/* Navigation Links - 尺寸比例適中舒適 */
+/* Navigation Links - 彈性適配，不需滑動 */
+nav {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
 nav ul {
     display: flex;
     list-style: none;
-    gap: 0.35rem;
-    flex-wrap: nowrap;
-    white-space: nowrap;
+    gap: 0.25rem;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
 }
 
 nav a {
     color: #2d6a4f;
     text-decoration: none;
     font-weight: 700;
-    padding: 0.38rem 0.68rem;
+    padding: 0.35rem 0.55rem;
     border-radius: 9999px;
     transition: var(--transition-fast);
-    font-size: 0.96rem;
+    font-size: 0.92rem;
     display: flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
     border: 1.5px solid transparent;
     white-space: nowrap;
 }
@@ -1289,9 +1305,32 @@ main {
     50% { transform: translateY(-8px); }
 }
 
-@keyframes float-logo {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-4px) rotate(5deg); }
+/* 草莓翻一圈動畫 */
+@keyframes strawberry-flip {
+    0% {
+        transform: rotate(0deg) translateY(0) scale(1);
+    }
+    14% {
+        transform: rotate(180deg) translateY(-5px) scale(1.18);
+    }
+    28% {
+        transform: rotate(360deg) translateY(0) scale(1);
+    }
+    100% {
+        transform: rotate(360deg) translateY(0) scale(1);
+    }
+}
+
+@keyframes strawberry-flip-fast {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.25);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
 }
 
 @keyframes slide-up-fade {
