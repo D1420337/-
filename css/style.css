@@ -143,7 +143,7 @@ header {
     animation: float-logo 4s ease-in-out infinite;
 }
 
-/* 平台名稱置於醜果翻身記下方 */
+/* 平台名稱與多層次品牌標題 */
 .logo-text {
     display: flex;
     flex-direction: column;
@@ -156,23 +156,21 @@ header {
     color: #064e3b;
     margin: 0;
     white-space: nowrap;
-    display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
 }
 
-.logo-text h1 .en-title {
-    font-size: 0.92rem;
-    font-weight: 700;
+.logo-text .sub-title {
+    font-size: 0.8rem;
     color: #059669;
-    font-family: 'Outfit', sans-serif;
-    letter-spacing: 0.02em;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
 }
 
-.logo-text span {
-    font-size: 0.78rem;
-    color: #3d7a5e;
+.logo-text .en-title {
+    font-size: 0.75rem;
     font-weight: 700;
+    color: #10b981;
+    font-family: 'Outfit', sans-serif;
     letter-spacing: 0.04em;
     white-space: nowrap;
 }
