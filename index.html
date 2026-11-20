@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- SVG Favicon (同步格外品草莓 Logo) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='bg' x1='20' y1='20' x2='80' y2='90' gradientUnits='userSpaceOnUse'><stop offset='0%25' stop-color='%23ff6b81'/><stop offset='60%25' stop-color='%23ee3344'/><stop offset='100%25' stop-color='%23c81e30'/></linearGradient><linearGradient id='lg' x1='50' y1='10' x2='50' y2='35' gradientUnits='userSpaceOnUse'><stop offset='0%25' stop-color='%2334d399'/><stop offset='100%25' stop-color='%23059669'/></linearGradient></defs><path d='M49,30 C44,23 31,21 21,28 C11,36 12,52 18,66 C24,79 38,90 49,92 C60,90 75,80 82,67 C90,52 90,37 81,29 C71,21 57,24 51,30 Z' fill='url(%23bg)'/><circle cx='34' cy='44' r='2' fill='%23fef08a'/><circle cx='46' cy='48' r='2' fill='%23fef08a'/><circle cx='62' cy='45' r='2' fill='%23fef08a'/><circle cx='38' cy='64' r='2' fill='%23fef08a'/><circle cx='54' cy='63' r='2' fill='%23fef08a'/><circle cx='48' cy='78' r='1.8' fill='%23fef08a'/><path d='M50,28 C42,27 28,24 23,17 C28,27 38,34 49,31 Z' fill='url(%23lg)'/><path d='M50,28 C58,27 73,25 78,18 C73,28 62,34 51,31 Z' fill='url(%23lg)'/><path d='M42,29 C45,21 55,21 58,29 Z' fill='%23059669'/><path d='M50,26 C50,18 53,13 58,9' stroke='%2310b981' stroke-width='3' stroke-linecap='round'/><path d='M58,9 C64,5 71,9 68,14 C64,15 59,12 58,9 Z' fill='%2334d399'/></svg>" />
     <!-- Custom Style -->
     <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -18,7 +20,269 @@
     <!-- Header & Navigation -->
     <header>
         <a href="#" class="logo" id="nav-logo" style="text-decoration:none; display:flex; align-items:center; gap:0.75rem; flex-shrink:0;">
-            <span class="logo-icon" style="font-size:2.2rem;">🍓</span>
+            <!-- 3D 透視空翻草莓 Logo 容器 (perspective: 600px; transform-style: preserve-3d) -->
+            <div class="logo-somersault-3d-wrap">
+                <svg class="strawberry-3d-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="醜果翻身記 Logo">
+                    <style>
+                        /* 容器 3D 透視空間設定 */
+                        .logo-somersault-3d-wrap {
+                            perspective: 600px;
+                            perspective-origin: center center;
+                            width: 50px;
+                            height: 50px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: relative;
+                            cursor: pointer;
+                            user-select: none;
+                        }
+
+                        .strawberry-3d-svg {
+                            width: 100%;
+                            height: 100%;
+                            overflow: visible;
+                            transform-style: preserve-3d;
+                        }
+
+                        /* 翻轉主體群組 (沿 X 軸 3D 翻跟斗) */
+                        .flipper-3d-character {
+                            transform-origin: 50px 60px;
+                            transform-box: fill-box;
+                            transform-style: preserve-3d;
+                            will-change: transform;
+                            /* 網頁初次載入/刷新時，自動執行 0.65s 翻身 */
+                            animation: somersault-smooth 0.65s cubic-bezier(0.38, 0.05, 0.22, 1) forwards;
+                        }
+
+                        /* JS 動態加上 .is-flipping 才會觸發，不用 :hover CSS（避免滑鼠移出時二次回播） */
+                        .flipper-3d-character.is-flipping {
+                            animation: somersault-smooth-hover 0.65s cubic-bezier(0.38, 0.05, 0.22, 1) forwards !important;
+                        }
+
+                        /* 落地金色星芒：平時隱藏，載入時連動爆發 */
+                        .sparkle-stars-group {
+                            transform-origin: 50px 50px;
+                            opacity: 0;
+                            pointer-events: none;
+                            animation: sparkle-after-flip 2.6s ease-out 0.65s forwards;
+                        }
+
+                        /* JS 動態加上 .is-sparkling 才觸發，同樣不用 :hover */
+                        .sparkle-stars-group.is-sparkling {
+                            animation: sparkle-after-flip-hover 2.6s ease-out 0.65s forwards !important;
+                        }
+
+                        /* ==========================================================================
+                           舒緩流暢 3D 空翻 (@keyframes)：載入與 Hover 動作軌跡完全一致
+                           ========================================================================== */
+                        @keyframes somersault-smooth {
+                            0% {
+                                transform: translateY(0) scale(1, 1) rotateX(0deg);
+                            }
+                            12% {
+                                transform: translateY(2px) scale(1.08, 0.88) rotateX(0deg);
+                            }
+                            35% {
+                                transform: translateY(-38px) scale(0.98, 1.05) rotateX(100deg);
+                            }
+                            55% {
+                                transform: translateY(-46px) scale(1.02, 1.02) rotateX(190deg);
+                            }
+                            78% {
+                                transform: translateY(-16px) scale(0.98, 1.05) rotateX(285deg);
+                            }
+                            90% {
+                                transform: translateY(1px) scale(1.12, 0.9) rotateX(360deg);
+                            }
+                            96% {
+                                transform: translateY(-2px) scale(0.98, 1.02) rotateX(360deg);
+                            }
+                            100% {
+                                transform: translateY(0) scale(1, 1) rotateX(360deg);
+                            }
+                        }
+
+                        @keyframes somersault-smooth-hover {
+                            0% {
+                                transform: translateY(0) scale(1, 1) rotateX(0deg);
+                            }
+                            12% {
+                                transform: translateY(2px) scale(1.08, 0.88) rotateX(0deg);
+                            }
+                            35% {
+                                transform: translateY(-38px) scale(0.98, 1.05) rotateX(100deg);
+                            }
+                            55% {
+                                transform: translateY(-46px) scale(1.02, 1.02) rotateX(190deg);
+                            }
+                            78% {
+                                transform: translateY(-16px) scale(0.98, 1.05) rotateX(285deg);
+                            }
+                            90% {
+                                transform: translateY(1px) scale(1.12, 0.9) rotateX(360deg);
+                            }
+                            96% {
+                                transform: translateY(-2px) scale(0.98, 1.02) rotateX(360deg);
+                            }
+                            100% {
+                                transform: translateY(0) scale(1, 1) rotateX(360deg);
+                            }
+                        }
+
+                        @keyframes sparkle-after-flip {
+                            0% {
+                                opacity: 0;
+                                transform: scale(0.3);
+                            }
+                            15% {
+                                opacity: 1;
+                                transform: scale(1.3);
+                                filter: drop-shadow(0 0 7px #f59e0b);
+                            }
+                            30% {
+                                transform: scale(1.05);
+                                opacity: 1;
+                            }
+                            60% {
+                                transform: scale(1.15) rotate(15deg);
+                                opacity: 0.95;
+                                filter: drop-shadow(0 0 8px #fbbf24);
+                            }
+                            85% {
+                                transform: scale(1) rotate(5deg);
+                                opacity: 0.85;
+                            }
+                            100% {
+                                opacity: 0;
+                                transform: scale(0.5);
+                            }
+                        }
+
+                        @keyframes sparkle-after-flip-hover {
+                            0% {
+                                opacity: 0;
+                                transform: scale(0.3);
+                            }
+                            15% {
+                                opacity: 1;
+                                transform: scale(1.3);
+                                filter: drop-shadow(0 0 7px #f59e0b);
+                            }
+                            30% {
+                                transform: scale(1.05);
+                                opacity: 1;
+                            }
+                            60% {
+                                transform: scale(1.15) rotate(15deg);
+                                opacity: 0.95;
+                                filter: drop-shadow(0 0 8px #fbbf24);
+                            }
+                            85% {
+                                transform: scale(1) rotate(5deg);
+                                opacity: 0.85;
+                            }
+                            100% {
+                                opacity: 0;
+                                transform: scale(0.5);
+                            }
+                        }
+                    </style>
+
+                    <defs>
+                        <!-- 溫暖草莓紅立體扁平微漸層 -->
+                        <linearGradient id="berry3dGrad" x1="20" y1="20" x2="80" y2="90" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#ff6b81" />
+                            <stop offset="45%" stop-color="#ff4757" />
+                            <stop offset="85%" stop-color="#ee3344" />
+                            <stop offset="100%" stop-color="#c81e30" />
+                        </linearGradient>
+
+                        <!-- 左側果瓣通透高光 -->
+                        <linearGradient id="berry3dHighlight" x1="30" y1="25" x2="48" y2="60" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
+                            <stop offset="70%" stop-color="#ffffff" stop-opacity="0" />
+                        </linearGradient>
+
+                        <!-- 自然葉綠色漸層 -->
+                        <linearGradient id="leaf3dGrad" x1="50" y1="12" x2="50" y2="35" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#34d399" />
+                            <stop offset="60%" stop-color="#10b981" />
+                            <stop offset="100%" stop-color="#059669" />
+                        </linearGradient>
+
+                        <!-- 翻身金色星芒輝光漸層 -->
+                        <linearGradient id="starGoldGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="30%" stop-color="#fef08a" />
+                            <stop offset="100%" stop-color="#f59e0b" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- 落地瞬間爆發並停留在空中的金色星芒群 (✨ 象徵醜果成功翻身) -->
+                    <g class="sparkle-stars-group">
+                        <!-- 右上方主閃亮星芒 -->
+                        <path d="M 85,20 Q 85,26 91,26 Q 85,26 85,32 Q 85,26 79,26 Q 85,26 85,20 Z" fill="url(#starGoldGrad)" />
+                        <!-- 左上方翠綠伴隨星 -->
+                        <path d="M 18,24 Q 18,28 22,28 Q 18,28 18,32 Q 18,28 14,28 Q 18,28 18,24 Z" fill="#34d399" />
+                        <!-- 左側璀璨小金星 -->
+                        <path d="M 16,56 Q 16,59 19,59 Q 16,59 16,62 Q 16,59 13,59 Q 16,59 16,56 Z" fill="url(#starGoldGrad)" />
+                        <!-- 右下方跳動星芒 -->
+                        <path d="M 84,65 Q 84,69 88,69 Q 84,69 84,73 Q 84,69 80,69 Q 84,69 84,65 Z" fill="url(#starGoldGrad)" />
+                        <!-- 散落光粒子 -->
+                        <circle cx="74" cy="12" r="2" fill="#fbbf24" />
+                        <circle cx="28" cy="14" r="1.6" fill="#fef08a" />
+                        <circle cx="89" cy="48" r="1.8" fill="#f59e0b" />
+                    </g>
+
+                    <!-- 3D 空翻角色本體：略微不規則擬人化可愛「醜草莓」 -->
+                    <g class="flipper-3d-character">
+                        <!-- 主果體 (天然微歪連體不對稱心型格外品) -->
+                        <path d="M 49,30 C 44,23 31,21 21,28 C 11,36 12,52 18,66 C 24,79 38,90 49,92 C 60,90 75,80 82,67 C 90,52 90,37 81,29 C 71,21 57,24 51,30 C 50,31 49.8,31 49,30 Z" fill="url(#berry3dGrad)" filter="drop-shadow(0 4px 6px rgba(200, 30, 48, 0.25))" />
+                        
+                        <!-- 晶瑩微高光弧面 -->
+                        <path d="M 23,32 C 16,39 17,52 22,64 C 24,68 28,60 27,50 C 26,41 28,34 33,31 C 36,29 27,28 23,32 Z" fill="url(#berry3dHighlight)" />
+
+                        <!-- 自然金黃小種籽 -->
+                        <g fill="#fef08a" opacity="0.9">
+                            <ellipse cx="32" cy="42" rx="1.4" ry="2.2" transform="rotate(-15 32 42)" />
+                            <ellipse cx="45" cy="46" rx="1.4" ry="2.2" transform="rotate(-5 45 46)" />
+                            <ellipse cx="61" cy="43" rx="1.4" ry="2.2" transform="rotate(12 61 43)" />
+                            <ellipse cx="73" cy="45" rx="1.4" ry="2.2" transform="rotate(18 73 45)" />
+                            <ellipse cx="27" cy="58" rx="1.3" ry="2" transform="rotate(-18 27 58)" />
+                            <ellipse cx="40" cy="62" rx="1.4" ry="2.2" transform="rotate(-3 40 62)" />
+                            <ellipse cx="56" cy="61" rx="1.4" ry="2.2" transform="rotate(8 56 61)" />
+                            <ellipse cx="69" cy="60" rx="1.3" ry="2" transform="rotate(15 69 60)" />
+                            <ellipse cx="37" cy="74" rx="1.2" ry="1.9" transform="rotate(-8 37 74)" />
+                            <ellipse cx="50" cy="76" rx="1.2" ry="1.9" transform="rotate(2 50 76)" />
+                            <ellipse cx="62" cy="73" rx="1.2" ry="1.9" transform="rotate(12 62 73)" />
+                            <ellipse cx="49" cy="85" rx="1" ry="1.6" />
+                        </g>
+
+                        <!-- 可愛擬人化小表情 (幸福彎眼 + 開心笑嘴 + 萌腮紅) -->
+                        <g>
+                            <!-- 雙眼瞇眼笑 -->
+                            <path d="M 37,51 Q 40,48 43,51" stroke="#4a0404" stroke-width="2" stroke-linecap="round" fill="none" />
+                            <path d="M 57,51 Q 60,48 63,51" stroke="#4a0404" stroke-width="2" stroke-linecap="round" fill="none" />
+                            <!-- 幸福紅暈腮紅 -->
+                            <ellipse cx="34" cy="55" rx="3.5" ry="2" fill="#ff7675" opacity="0.65" />
+                            <ellipse cx="66" cy="55" rx="3.5" ry="2" fill="#ff7675" opacity="0.65" />
+                            <!-- 開心笑嘴 -->
+                            <path d="M 46,57 Q 50,62 54,57" stroke="#4a0404" stroke-width="1.8" stroke-linecap="round" fill="none" />
+                        </g>
+
+                        <!-- 頂部天然翠綠葉片與向上小嫩芽 -->
+                        <g>
+                            <path d="M 50,28 C 42,27 28,24 23,17 C 28,27 38,34 49,31 Z" fill="url(#leaf3dGrad)" />
+                            <path d="M 50,28 C 58,27 73,25 78,18 C 73,28 62,34 51,31 Z" fill="url(#leaf3dGrad)" />
+                            <path d="M 42,29 C 45,21 55,21 58,29 C 55,32 45,32 42,29 Z" fill="#059669" />
+                            <!-- 向上生長之循環重生小嫩芽 -->
+                            <path d="M 50,26 C 50,18 53,13 58,9" stroke="#10b981" stroke-width="2.6" stroke-linecap="round" />
+                            <path d="M 58,9 C 64,5 71,9 68,14 C 64,15 59,12 58,9 Z" fill="#34d399" />
+                        </g>
+                    </g>
+                </svg>
+            </div>
             <div class="logo-text" style="display:flex; flex-direction:column; gap:0.25rem; line-height:1.2;">
                 <h1 style="margin:0; font-size:1.35rem; font-weight:800; color:#064e3b; letter-spacing:0.02em; white-space:nowrap;">醜果翻身記</h1>
                 <span class="sub-title" style="font-size:0.82rem; color:#059669; font-weight:700; letter-spacing:0.04em; white-space:nowrap;">格外品低碳媒合平台</span>

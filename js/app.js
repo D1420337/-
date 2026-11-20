@@ -930,3 +930,76 @@ function saveMemberProfile(role) {
     showToast("💾 個人檔案與註冊資料更新成功！");
 }
 
+/* ── 草莓 Logo 滑鼠移入翻身（Web Animations API，每次移入必重播） ── */
+(function () {
+    /* 與 CSS @keyframes 完全一致的翻身軌跡 */
+    var FLIP_KEYFRAMES = [
+        { transform: 'translateY(0) scale(1,1) rotateX(0deg)',          offset: 0    },
+        { transform: 'translateY(2px) scale(1.08,0.88) rotateX(0deg)',  offset: 0.12 },
+        { transform: 'translateY(-38px) scale(0.98,1.05) rotateX(100deg)', offset: 0.35 },
+        { transform: 'translateY(-46px) scale(1.02,1.02) rotateX(190deg)', offset: 0.55 },
+        { transform: 'translateY(-16px) scale(0.98,1.05) rotateX(285deg)', offset: 0.78 },
+        { transform: 'translateY(1px) scale(1.12,0.9) rotateX(360deg)', offset: 0.90 },
+        { transform: 'translateY(-2px) scale(0.98,1.02) rotateX(360deg)', offset: 0.96 },
+        { transform: 'translateY(0) scale(1,1) rotateX(360deg)',         offset: 1    },
+    ];
+    var FLIP_TIMING = {
+        duration: 650,
+        easing: 'cubic-bezier(0.38,0.05,0.22,1)',
+        fill: 'forwards'
+    };
+
+    /* 金色星芒軌跡 */
+    var SPARK_KEYFRAMES = [
+        { opacity: 0,    transform: 'scale(0.3)',           offset: 0    },
+        { opacity: 1,    transform: 'scale(1.3)',           offset: 0.15 },
+        { opacity: 1,    transform: 'scale(1.05)',          offset: 0.30 },
+        { opacity: 0.95, transform: 'scale(1.15) rotate(15deg)', offset: 0.60 },
+        { opacity: 0.85, transform: 'scale(1) rotate(5deg)', offset: 0.85 },
+        { opacity: 0,    transform: 'scale(0.5)',           offset: 1    },
+    ];
+    var SPARK_TIMING = {
+        duration: 2600,
+        delay: 650,
+        easing: 'ease-out',
+        fill: 'forwards'
+    };
+
+    function initLogoFlip() {
+        var wrap = document.querySelector('.logo-somersault-3d-wrap');
+        if (!wrap) return;
+        var character = wrap.querySelector('.flipper-3d-character');
+        var sparkle   = wrap.querySelector('.sparkle-stars-group');
+        if (!character) return;
+
+        var flipAnim  = null;
+        var sparkAnim = null;
+        var animating = false;
+
+        wrap.addEventListener('mouseenter', function () {
+            if (animating) return;
+            animating = true;
+
+            /* 取消上一次的 Web Animation（讓 forwards fill 不卡住） */
+            if (flipAnim)  { flipAnim.cancel();  flipAnim  = null; }
+            if (sparkAnim) { sparkAnim.cancel(); sparkAnim = null; }
+
+            /* 清除 CSS 自動播放的 animation，避免與 JS 動畫打架 */
+            character.style.animation = 'none';
+            if (sparkle) sparkle.style.animation = 'none';
+
+            /* 用 Web Animations API 重新播放，每次都是全新物件 */
+            flipAnim  = character.animate(FLIP_KEYFRAMES, FLIP_TIMING);
+            if (sparkle) sparkAnim = sparkle.animate(SPARK_KEYFRAMES, SPARK_TIMING);
+
+            setTimeout(function () { animating = false; }, 700);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLogoFlip);
+    } else {
+        initLogoFlip();
+    }
+})();
+
