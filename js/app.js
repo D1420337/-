@@ -47,16 +47,16 @@ let MARKET_PRODUCTS = [
     {
         id: "prod-4",
         name: "香甜山蕉 (表面成熟黑斑)",
-        farmer: "高雄陳農友",
+        farmer: "旗山陳農友",
         type: "香蕉",
         grade: "C",
         weight: 200,
         price: 10,
         carbon: 1.2,
-        location: "高雄大樹",
+        location: "高雄旗山",
         county: "高雄",
         image: "assets/banana_ugly.png",
-        desc: "本季盛產，香蕉熟度高，表面大面積成熟黑芝麻斑點，果肉十分軟綿香濃。適合食品加工或做為生態肥料。"
+        desc: "旗山蕉農本季盛產，香蕉熟度高，表面大面積成熟黑芝麻斑點，果肉十分軟綿香濃。適合食品加工或做為生態肥料。"
     },
     {
         id: "prod-5",
@@ -437,7 +437,9 @@ function listUglyFruitToMarketplace(fruitData, weight, location) {
     // 如果地圖已經載入，同時在地圖中臨時註冊一個新小農，增加真實對接體驗
     if (map) {
         let newCoords = [24.4245 + (Math.random() - 0.5) * 0.05, 120.8712 + (Math.random() - 0.5) * 0.05];
-        if (location.includes("台南")) {
+        if (location.includes("旗山")) {
+            newCoords = [22.8858 + (Math.random() - 0.5) * 0.03, 120.4828 + (Math.random() - 0.5) * 0.03];
+        } else if (location.includes("台南")) {
             newCoords = [22.9621 + (Math.random() - 0.5) * 0.05, 120.3278 + (Math.random() - 0.5) * 0.05];
         } else if (location.includes("高雄")) {
             newCoords = [22.7214 + (Math.random() - 0.5) * 0.05, 120.4056 + (Math.random() - 0.5) * 0.05];

@@ -35,16 +35,16 @@ const MAP_NODES = {
         },
         {
             id: "farm-3",
-            name: "高雄陳農友",
+            name: "旗山陳農友",
             type: "farm",
-            coords: [22.7214, 120.4056],
+            coords: [22.8858, 120.4828],
             fruit: "香蕉",
             stock: "200 kg (C級)",
             suggestedPrice: 10,
             carbonFactor: 1.2,
             icon: "🍌",
             county: "高雄",
-            desc: "高雄大樹香蕉園，本季盛產面臨滯銷，且香蕉成熟速度快，表面開始浮現黑斑，亟需消化。"
+            desc: "高雄旗山老牌香蕉園，本季盛產面臨滯銷，且香蕉成熟速度快，表面開始浮現黑斑，亟需消化。"
         },
         {
             id: "farm-4",
